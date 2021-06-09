@@ -1,6 +1,7 @@
 import React, {ChangeEvent} from "react";
 import {FiletValueType} from "./App";
 import {AddItemForm} from "./AddItemForm";
+import {EditableSpan} from "./EditableSpan";
 
 export type taskType = {
     id: string
@@ -18,6 +19,8 @@ type TodoListPropsType = {
     addTask: (title: string, todolistId: string) => void
     changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
     removeTodolist: (todolistId: string) => void
+    changeTaskTitle: (id: string, newTitle: string, todolistId: string) => void
+    changeTodoListTitle: (newTitle: string, todolistId: string) => void
 }
 
 
@@ -37,12 +40,15 @@ export function Todolist(props: TodoListPropsType) {
     const onClickRemoveTodolist = () => {
         props.removeTodolist(props.id)
     }
+    const changeTodoListTitle = (title: string) => {
+        props.changeTodoListTitle(title, props.id);
+    }
 
     return (
         <div>
 
             <h3>
-                {props.title}
+                <EditableSpan title={props.title} onChange={changeTodoListTitle}/>
                 <button onClick={onClickRemoveTodolist}>x</button>
             </h3>
 
@@ -53,10 +59,14 @@ export function Todolist(props: TodoListPropsType) {
                 {props.task
                     .map(t => {
 
+
                         let onClickHandler = () => props.removeTask(t.id, props.id);
                         let onChangeHandlerChecked = (e: ChangeEvent<HTMLInputElement>) => {
                             let newIsDoneValue = e.currentTarget.checked;
                             props.changeTaskStatus(t.id, newIsDoneValue, props.id);
+                        }
+                        let onChangeTaskTitleHandler = (newTitle: string) => {
+                            props.changeTaskTitle(t.id, newTitle, props.id);
                         }
 
                         return <li key={t.id}
@@ -65,7 +75,7 @@ export function Todolist(props: TodoListPropsType) {
                                    onChange={onChangeHandlerChecked}
                                    checked={t.isDone}
                             />
-                            <span>{t.title}</span>
+                            <EditableSpan title={t.title} onChange={onChangeTaskTitleHandler}/>
                             <button onClick={onClickHandler}>x</button>
                         </li>
                     })}
@@ -80,6 +90,5 @@ export function Todolist(props: TodoListPropsType) {
     )
 
 }
-
 
 
