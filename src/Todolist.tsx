@@ -2,13 +2,15 @@ import React, {ChangeEvent} from "react";
 import {FiletValueType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
+import {Button, Checkbox, IconButton} from "@material-ui/core";
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import {Delete} from "@material-ui/icons";
 
 export type taskType = {
     id: string
     title: string
     isDone: boolean
 }
-
 type TodoListPropsType = {
     id: string
     title: string
@@ -27,9 +29,9 @@ type TodoListPropsType = {
 export function Todolist(props: TodoListPropsType) {
 
 
-    let changeFilter = (e: any) => {
-        props.changeFilter(e.currentTarget.innerHTML, props.id)
-    }
+    const onAllClickHandler = () => props.changeFilter('All', props.id)
+    const onActiveClickHandler = () => props.changeFilter('Active', props.id)
+    const onCompletedClickHandler = () => props.changeFilter('Completed', props.id)
 
     let addTaskHandler = (title: string) => {
         if (title && title.trim() !== '') {
@@ -49,7 +51,7 @@ export function Todolist(props: TodoListPropsType) {
 
             <h3>
                 <EditableSpan title={props.title} onChange={changeTodoListTitle}/>
-                <button onClick={onClickRemoveTodolist}>x</button>
+                <IconButton color={'primary'} onClick={onClickRemoveTodolist}><HighlightOffIcon/></IconButton>
             </h3>
 
             <div>
@@ -59,8 +61,7 @@ export function Todolist(props: TodoListPropsType) {
                 {props.task
                     .map(t => {
 
-
-                        let onClickHandler = () => props.removeTask(t.id, props.id);
+                        let onClickRemoveTaskHandler = () => props.removeTask(t.id, props.id);
                         let onChangeHandlerChecked = (e: ChangeEvent<HTMLInputElement>) => {
                             let newIsDoneValue = e.currentTarget.checked;
                             props.changeTaskStatus(t.id, newIsDoneValue, props.id);
@@ -71,20 +72,31 @@ export function Todolist(props: TodoListPropsType) {
 
                         return <li key={t.id}
                                    className={t.isDone ? 'is-done' : ''}>
-                            <input type='checkbox'
-                                   onChange={onChangeHandlerChecked}
-                                   checked={t.isDone}
+                            <Checkbox
+                                onChange={onChangeHandlerChecked}
+                                checked={t.isDone}
                             />
                             <EditableSpan title={t.title} onChange={onChangeTaskTitleHandler}/>
-                            <button onClick={onClickHandler}>x</button>
+                            <IconButton onClick={onClickRemoveTaskHandler}><Delete/></IconButton>
                         </li>
                     })}
             </ul>
 
 
-            <button onClick={changeFilter}>All</button>
-            <button onClick={changeFilter}>Active</button>
-            <button onClick={changeFilter}>Completed</button>
+            <div style={{paddingTop: '10px'}}>
+                <Button variant={props.filter === 'All' ? 'contained' : 'text'}
+                        onClick={onAllClickHandler}
+                        color={'primary'}>All
+                </Button>
+                <Button variant={props.filter === 'Active' ? 'contained' : 'text'}
+                        onClick={onActiveClickHandler}
+                        color={'primary'}>Active
+                </Button>
+                <Button variant={props.filter === 'Completed' ? 'contained' : 'text'}
+                        onClick={onCompletedClickHandler}
+                        color={'primary'}>Completed
+                </Button>
+            </div>
 
         </div>
     )
