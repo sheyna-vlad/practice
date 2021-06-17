@@ -1,10 +1,10 @@
 import React, {ChangeEvent} from "react";
-import {FiletValueType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, Checkbox, IconButton} from "@material-ui/core";
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import {Delete} from "@material-ui/icons";
+import {FilterValuesType} from "./App";
 
 export type taskType = {
     id: string
@@ -16,8 +16,8 @@ type TodoListPropsType = {
     title: string
     task: Array<taskType>
     removeTask: (id: string, todolistId: string) => void
-    filter: FiletValueType
-    changeFilter: (value: FiletValueType, todolistId: string) => void
+    filter: FilterValuesType
+    changeFilter: (value: FilterValuesType, todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
     changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
     removeTodolist: (todolistId: string) => void
