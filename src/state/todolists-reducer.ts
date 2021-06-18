@@ -1,5 +1,6 @@
 import {v1} from "uuid";
 import {FilterValuesType, TodolistType} from "../App";
+import {todolist1, todolist2} from "./task-reducer";
 
 
 export type removeTodolistActionType = {
@@ -26,7 +27,17 @@ type ActionsType = removeTodolistActionType | AddTodolistActionType
     | ChangeTodolistTitleActionType
     | ChangeTodolistFilterActionType
 
-const initialState: Array<TodolistType> =  []
+const initialState: Array<TodolistType> =  [
+    {
+        id: todolist1,
+        title: 'What to learn',
+        filter: "All"
+    },
+    {
+        id: todolist2,
+        title: 'What to eat',
+        filter: "All"
+    }]
 
 export const todolistsReducer = (state: Array<TodolistType> = initialState, action: ActionsType): Array<TodolistType> => {
     switch (action.type) {
@@ -54,7 +65,7 @@ export const todolistsReducer = (state: Array<TodolistType> = initialState, acti
             return [...stateCopy]
         }
         default:
-            throw new Error("I don't understand this type")
+            return state;
     }
 }
 
