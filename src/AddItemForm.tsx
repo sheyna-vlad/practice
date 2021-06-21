@@ -1,11 +1,11 @@
 import React, {ChangeEvent, useState} from "react";
-import { IconButton, TextField} from "@material-ui/core";
+import {IconButton, TextField} from "@material-ui/core";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
-export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
+export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((props) => {
     const [title, setTitle] = useState<string>();
     const [error, setError] = useState<string | null>(null);
 
@@ -13,7 +13,10 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
         setTitle(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: any) => {
-        setError(null);
+        if (error !== null) {
+            setError(null);
+
+        }
         if (e.charCode === 13) {
             addItem();
         }
@@ -28,7 +31,6 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
         }
 
     }
-
 
 
     return <div>
@@ -47,4 +49,4 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
     </div>
 
 
-}
+});
